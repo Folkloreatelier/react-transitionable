@@ -33,6 +33,7 @@ git push origin develop
 git checkout master
 git tag $VERSION
 git push origin master --tags
+npm publish
 
 # Remove release branch
 git branch -d $RELEASE_BRANCH
