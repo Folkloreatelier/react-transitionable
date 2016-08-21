@@ -6,7 +6,7 @@ var rename = require('gulp-rename');
 module.exports = function(gulp, config)
 {
     return function() {
-        return gulp.src(config.jsTmpPath+'/react-draw.js')
+        return gulp.src(config.jsTmpPath+'/*.js')
                 .pipe(uglify())
                 .pipe(rename({
                     extname: '.min.js'
