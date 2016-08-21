@@ -14,9 +14,10 @@ git push
 # Create release branch
 git checkout -b $RELEASE_BRANCH develop
 gulp build
-jq '.version = "${VERSION/v/}"' ./package.json > package.json
 git add .
 git commit -am "Build $NEXT_VERSION"
+npm version ${VERSION/v/}
+git commit -am "Bump to $NEXT_VERSION"
 git push origin $RELEASE_BRANCH
 
 # Merge release branch in master
