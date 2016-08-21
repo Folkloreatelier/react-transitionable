@@ -18,8 +18,9 @@ var Transitionable = React.createClass({
         ]),
 
         className: React.PropTypes.string,
+        childClassName: React.PropTypes.string,
         style: React.PropTypes.object,
-        styleView: React.PropTypes.object,
+        childStyle: React.PropTypes.object,
 
         transitionIn: React.PropTypes.func,
         transitionOut: React.PropTypes.func,
@@ -31,27 +32,16 @@ var Transitionable = React.createClass({
     getDefaultProps: function()
     {
         return {
-            className: '',
+            className: null,
+            childClassName: null,
             style: {},
-            styleView: {},
+            childStyle: {},
             transitionIn: function(transitionable, opts, done)
             {
-                /*TweenMax.fromTo(transitionable.el, opts.mounting ? 0:0.4, {
-                    opacity: 0
-                }, {
-                    opacity: 1,
-                    onComplete: done
-                });*/
-                
                 done();
             },
             transitionOut: function(transitionable, opts, done)
             {
-                /*TweenMax.to(transitionable.el, opts.mounting ? 0:0.4, {
-                    opacity: 0,
-                    onComplete: done
-                });*/
-                
                 done();
             },
             transitionOther: function(transitionable, opts, done)
@@ -78,11 +68,14 @@ var Transitionable = React.createClass({
     {
         var wrappedChildren = this.state.allChildren.map(_.bind(this.renderChildren, this));
 
-        var className = this.props.className;
-        className += ' transitionable-views';
+        var className = ['transitionable-views'];
+        if(this.props.className && this.props.className.length)
+        {
+            className.push(this.props.className);
+        }
 
         return (
-            <div className={className} style={this.props.style}>
+            <div className={className.join(' ')} style={this.props.style}>
                 { wrappedChildren }
             </div>
         )
@@ -92,21 +85,25 @@ var Transitionable = React.createClass({
     {
         var key = 't-'+child.key;
 
-        var className = 'transitionable-view';
+        var className = ['transitionable-view'];
+        if(this.props.childClassName && this.props.childClassName.length)
+        {
+            className.push(this.props.childClassName);
+        }
 
         if (_.indexOf(this.state.transitioningIn, child.key) > -1)
         {
-            className += ' transitioning transitioning-in';
+            className.push('transitioning transitioning-in');
         } else if (_.indexOf(this.state.transitioningOut, child.key) > -1)
         {
-            className += ' transitioning transitioning-out';
+            className.push('transitioning transitioning-out');
         } else if (_.indexOf(this.state.transitioningOther, child.key) > -1)
         {
-            className += ' transitioning transitioning-other';
+            className.push('transitioning transitioning-other');
         }
 
         return (
-            <div className={className} key={key} ref={key} style={this.props.styleView}>
+            <div className={className.join(' ')} key={key} ref={key} style={this.props.childStyle}>
                 { child }
             </div>
         );
@@ -342,12 +339,19 @@ var Transitionable = React.createClass({
             key: key,
             props: child ? child.props:{}
         };
-        this.props['transition'+directionName].call(this, transitionable, opts, _.bind(function()
+        
+        var onTransitionDone = _.bind(function()
         {
             this.onTransitionComplete(transitionable, direction);
             this['onTransition'+directionName+'Complete'](transitionable, child);
             setTimeout(_.bind(done, this), 0);
-        }, this));
+        }, this)
+        
+        var transitionReturn = this.props['transition'+directionName].call(this, transitionable, opts, onTransitionDone);
+        if(transitionReturn && _.isFunction(transitionReturn.then))
+        {
+            transitionReturn.then(onTransitionDone);
+        }
     },
 
     getChildrenAsArray: function(children)
