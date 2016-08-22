@@ -118,24 +118,21 @@ var Transitionable = React.createClass({
 
     componentWillReceiveProps: function(nextProps)
     {
-        var currentChildren = this.getChildrenAsArray(this.props.children);
         var nextChildren = this.getChildrenAsArray(nextProps.children);
-        var currentChildrenKey = _.map(currentChildren, 'key').join('|');
-        var nextChildrenKey = _.map(nextChildren, 'key').join('|');
-        
+
         //Replace existing children
         var newChildren = [];
         _.each(this.state.children, function(child)
         {
-            var existingChild = _.find(nextChildren, ['key', child.key]);
-            newChildren.push(existingChild ? existingChild:child);
+            var existingChild = _.find(nextChildren, 'key', child.key);
+            newChildren.push(existingChild ? existingChild:child)
         });
-        
+
         //Replace existing transitioning children
         var newTransitioningChildren = [];
         _.each(this.state.transitioningChildren, function(child)
         {
-            var existingChild = _.find(nextChildren, ['key', child.key]);
+            var existingChild = _.find(nextChildren, 'key', child.key);
             newTransitioningChildren.push(existingChild ? existingChild:child)
         });
 
@@ -144,20 +141,20 @@ var Transitionable = React.createClass({
         {
             return child.key;
         });
-
-        //Add new children
-        if(currentChildrenKey !== nextChildrenKey)
+        
+        if(this.props.children !== nextProps.children)
         {
+            //Add new children
             _.each(nextChildren, function(child)
             {
-                var existingIndex = _.findIndex(allChildren, ['key', child.key]);
+                var existingIndex = _.findIndex(allChildren, 'key', child.key);
                 if(existingIndex === -1)
                 {
                     allChildren.push(child);
                 }
             });
         }
-
+        
         this.setState({
             children: newChildren,
             transitioningChildren: newTransitioningChildren,
