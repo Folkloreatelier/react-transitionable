@@ -11,6 +11,12 @@
     "name": "Folklore",
     "email": "info@atelierfolklore.ca"
   },
+  "contributors": [
+    {
+      "name": "David Mongeau-Petitpas",
+      "email": "dmp@atelierfolklore.ca"
+    } 
+  ],
   "license": "ISC",
   "dependencies": {
     "debug": "^2.2.0",
