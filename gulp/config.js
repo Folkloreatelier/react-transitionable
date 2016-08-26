@@ -5,14 +5,14 @@ module.exports = function(gulp, plugins)
     var examplesFolder = './examples';
     var assetsSrcFolder = './src';
     var assetsTmpPath = './.tmp';
-    var assetsBuildFolder = './dist';
+    var assetsBuildFolder = './';
     var publicPath = [
         assetsTmpPath,
         assetsSrcFolder,
-        './examples'
+        examplesFolder
     ];
     
-    var jsConfigPath = './webpack.config.js';
+    var jsConfigPath = './build/webpack.config.js';
     
     var browserSyncWatchFiles = [
         examplesFolder+'/**/*.html',

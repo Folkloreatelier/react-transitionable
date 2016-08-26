@@ -32,7 +32,7 @@ gulp.task('browsersync-reload', function()
 var configExamples = _.merge({}, config, {
     jsSrcPath: './examples/js',
     jsTmpPath: './.tmp/js',
-    jsConfigPath: './webpack.config.examples.js'
+    jsConfigPath: './build/webpack.config.examples.js'
 });
 gulp.task('webpack', require(path.join(gulpPath,'tasks/webpack'))(gulp, config));
 gulp.task('webpack-examples', require(path.join(gulpPath,'tasks/webpack'))(gulp, configExamples, true));
