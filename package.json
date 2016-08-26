@@ -1,6 +1,6 @@
 {
   "name": "react-transitionable",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "React Component that transition children elements.",
   "main": "dist/react-transitionable.js",
   "scripts": {
@@ -15,7 +15,7 @@
     {
       "name": "David Mongeau-Petitpas",
       "email": "dmp@atelierfolklore.ca"
-    } 
+    }
   ],
   "license": "ISC",
   "dependencies": {
