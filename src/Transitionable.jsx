@@ -3,7 +3,7 @@ var _ = require('lodash');
 var Immutable = require('immutable');
 var ReactDOM = require('react-dom');
 
-var debug = require('debug')('app:transitionable');
+var debug = require('debug')('react-transitionable');
 
 var Transitionable = React.createClass({
 
@@ -124,7 +124,10 @@ var Transitionable = React.createClass({
         var newChildren = [];
         _.each(this.state.children, function(child)
         {
-            var existingChild = _.find(nextChildren, 'key', child.key);
+            var existingChild = _.find(nextChildren, function(c)
+            {
+                return c.key === child.key;
+            });
             newChildren.push(existingChild ? existingChild:child)
         });
 
@@ -132,7 +135,10 @@ var Transitionable = React.createClass({
         var newTransitioningChildren = [];
         _.each(this.state.transitioningChildren, function(child)
         {
-            var existingChild = _.find(nextChildren, 'key', child.key);
+            var existingChild = _.find(nextChildren, function(c)
+            {
+                return c.key === child.key;
+            });
             newTransitioningChildren.push(existingChild ? existingChild:child)
         });
 
@@ -147,7 +153,10 @@ var Transitionable = React.createClass({
             //Add new children
             _.each(nextChildren, function(child)
             {
-                var existingIndex = _.findIndex(allChildren, 'key', child.key);
+                var existingIndex = _.findIndex(allChildren, function(c)
+                {
+                    return c.key === child.key;
+                });
                 if(existingIndex === -1)
                 {
                     allChildren.push(child);
@@ -291,11 +300,11 @@ var Transitionable = React.createClass({
         var remainingTransitionsKeys = _.difference(_.map(remainingTransitions, 'key'), transitioningOther);
         //var remainingTransitionsKeys = _.map(remainingTransitions, 'key');
 
-        /*debug('Should transitions', keys);
+        debug('Should transitions', keys);
         debug('Will transitions', _.map(remainingTransitions, 'key'));
         debug('Transitioning in', transitioningIn);
         debug('Transitioning out', transitioningOut);
-        debug('Transitioning other', transitioningOther);*/
+        debug('Transitioning other', transitioningOther);
 
         this.setState({
             transitioningIn: transitioningIn,
@@ -330,7 +339,10 @@ var Transitionable = React.createClass({
     {
         var el = ReactDOM.findDOMNode(this.refs['t-'+key]);
         var directionName = direction.substr(0,1).toUpperCase()+direction.substr(1);
-        var child = _.find(this.state.allChildren, ['key', key]);
+        var child = _.find(this.state.allChildren, function(c)
+        {
+            return c.key === key;
+        });
         var transitionable = {
             el: el,
             key: key,
@@ -415,10 +427,10 @@ var Transitionable = React.createClass({
             transitioningChildren: transitioningChildren
         }, function()
         {
-            /*debug('Transitioning children', this.state.transitioningChildren);
+            debug('Transitioning children', this.state.transitioningChildren);
             debug('Transitioning in', this.state.transitioningIn);
             debug('Transitioning out', this.state.transitioningOut);
-            debug('Transitioning other', this.state.transitioningOther);*/
+            debug('Transitioning other', this.state.transitioningOther);
             if (this.props.onTransitionsComplete)
             {
                 this.props.onTransitionsComplete();
