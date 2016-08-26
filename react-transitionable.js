@@ -67,7 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Immutable = __webpack_require__(4);
 	var ReactDOM = __webpack_require__(5);
 	
-	var debug = __webpack_require__(6)('app:transitionable');
+	var debug = __webpack_require__(6)('react-transitionable');
 	
 	var Transitionable = React.createClass({
 	    displayName: 'Transitionable',
@@ -172,14 +172,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //Replace existing children
 	        var newChildren = [];
 	        _.each(this.state.children, function (child) {
-	            var existingChild = _.find(nextChildren, 'key', child.key);
+	            var existingChild = _.find(nextChildren, function (c) {
+	                return c.key === child.key;
+	            });
 	            newChildren.push(existingChild ? existingChild : child);
 	        });
 	
 	        //Replace existing transitioning children
 	        var newTransitioningChildren = [];
 	        _.each(this.state.transitioningChildren, function (child) {
-	            var existingChild = _.find(nextChildren, 'key', child.key);
+	            var existingChild = _.find(nextChildren, function (c) {
+	                return c.key === child.key;
+	            });
 	            newTransitioningChildren.push(existingChild ? existingChild : child);
 	        });
 	
@@ -191,7 +195,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.props.children !== nextProps.children) {
 	            //Add new children
 	            _.each(nextChildren, function (child) {
-	                var existingIndex = _.findIndex(allChildren, 'key', child.key);
+	                var existingIndex = _.findIndex(allChildren, function (c) {
+	                    return c.key === child.key;
+	                });
 	                if (existingIndex === -1) {
 	                    allChildren.push(child);
 	                }
@@ -312,11 +318,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var remainingTransitionsKeys = _.difference(_.map(remainingTransitions, 'key'), transitioningOther);
 	        //var remainingTransitionsKeys = _.map(remainingTransitions, 'key');
 	
-	        /*debug('Should transitions', keys);
+	        debug('Should transitions', keys);
 	        debug('Will transitions', _.map(remainingTransitions, 'key'));
 	        debug('Transitioning in', transitioningIn);
 	        debug('Transitioning out', transitioningOut);
-	        debug('Transitioning other', transitioningOther);*/
+	        debug('Transitioning other', transitioningOther);
 	
 	        this.setState({
 	            transitioningIn: transitioningIn,
@@ -345,7 +351,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    callTransition: function (direction, key, opts, done) {
 	        var el = ReactDOM.findDOMNode(this.refs['t-' + key]);
 	        var directionName = direction.substr(0, 1).toUpperCase() + direction.substr(1);
-	        var child = _.find(this.state.allChildren, ['key', key]);
+	        var child = _.find(this.state.allChildren, function (c) {
+	            return c.key === key;
+	        });
 	        var transitionable = {
 	            el: el,
 	            key: key,
@@ -414,10 +422,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            children: newChildren,
 	            transitioningChildren: transitioningChildren
 	        }, function () {
-	            /*debug('Transitioning children', this.state.transitioningChildren);
+	            debug('Transitioning children', this.state.transitioningChildren);
 	            debug('Transitioning in', this.state.transitioningIn);
 	            debug('Transitioning out', this.state.transitioningOut);
-	            debug('Transitioning other', this.state.transitioningOther);*/
+	            debug('Transitioning other', this.state.transitioningOther);
 	            if (this.props.onTransitionsComplete) {
 	                this.props.onTransitionsComplete();
 	            }
