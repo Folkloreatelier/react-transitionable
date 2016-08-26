@@ -2,7 +2,7 @@
   "name": "react-transitionable",
   "version": "0.1.9",
   "description": "React Component that transition children elements.",
-  "main": "dist/react-transitionable.js",
+  "main": "react-transitionable.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "./build/release.sh"
