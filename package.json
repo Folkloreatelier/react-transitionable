@@ -1,6 +1,6 @@
 {
   "name": "react-transitionable",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React Component that transition children elements.",
   "main": "react-transitionable.js",
   "scripts": {
